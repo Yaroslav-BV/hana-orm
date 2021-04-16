@@ -11,7 +11,7 @@ class TableModel {
 
     this.table = doubleQuotes ? `"${table}"` : table
     this._sqlSelectTmp =
-      'SELECT <%= columns %> FROM <%= table %> <%= conditions %>'
+      'SELECT <%= columns %> FROM <%= table %> <%= conditions %> <%= orders %>'
   }
 
   set sqlSelectTmp(value) {
@@ -27,14 +27,14 @@ class TableModel {
   }
 
   find(param = {}) {
-    const { attributes, where } = param
+    const { attributes, where, orders } = param
 
     // * Если атрибуты есть, но не массив, то выводить ошибку
     if (attributes && !_.isArray(attributes))
       throw Error('The attribute list must be an array')
 
     // * Если атрибуты это пустой массив или undefined, то '*', иначе преобразуем массив в строку
-    const columns = !_.isEmpty(attributes) ? attributes : '*'
+    const columns = !_.isEmpty(attributes) ? attributes.join(', ') : '*'
 
     // * Если есть условие и оно массив или функия или не объект, то выводить ошибку
     if (
@@ -55,11 +55,28 @@ class TableModel {
     // * Преобразуем значения условия в массив
     const condValues = !_.isEmpty(where) ? Object.values(where) : []
 
+    if (
+      orders &&
+      (_.isArray(orders) || _.isFunction(orders) || !_.isObject(orders))
+    )
+      throw Error(
+        `The conditions list must be an object. Condition received value: ${orders}, type: ${Object.prototype.toString.call(
+          orders
+        )}`
+      )
+
+    const orderBy = !_.isEmpty(orders)
+      ? `ORDER BY ${Object.entries(orders)
+          .map((item) => item.join(' '))
+          .join(', ')}`
+      : ''
+
     // * Заполняем шаблон для SQL SELECT
     const selectStm = _.template(this.sqlSelectTmp)({
       columns: columns,
       table: this.table,
       conditions: condFields,
+      orders: orderBy,
     })
     this.sqlSelectTmp = 'initial'
 

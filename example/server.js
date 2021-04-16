@@ -23,10 +23,18 @@ app.get('/user-data', async (req, res) => {
   const User = new TableModel('users', { doubleQuotes: true }) // create user table model with quoted name
 
   try {
+    /* send sql:
+      SELECT id, first_name, last_name, age FROM "user" WHERE id = '35001122' ORDER BY id DESC, first_name ASC
+      and return result
+    */
     const userData = await User.findOne({
       attributes: ['id', 'first_name', 'last_name', 'age'],
       where: { id: '35001122' },
-    }) // send SELECT id, first_name, last_name, age FROM "users" WHERE id = '35001122' and return result
+      orders: {
+        id: 'DESC',
+        first_name: 'ASC'
+      },
+    })
 
     res.status(200).json(userData[0])
   } catch (error) {
