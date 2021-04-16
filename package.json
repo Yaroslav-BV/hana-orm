@@ -1,0 +1,16 @@
+{
+  "name": "hana-orm",
+  "version": "0.0.1",
+  "description": "SAP HANA ORM for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Yaroslav Badikov <yavabanote2@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@sap/hana-client": "^2.4.196",
+    "underscore": "^1.13.0"
+  }
+}
