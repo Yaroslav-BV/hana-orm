@@ -11,80 +11,75 @@
 
 ### Input
 
-example: {
-  key: 'id',
+base: {
+  key: 'key',
   operator: 'EQ',
-  value: '35001234' 
+  value: 'value' 
 }
 
 where: {
-  example 
+  base 
 }
 
 ### Output
 
-WHERE id = '35001234'
+WHERE key = 'value'
 
 ### Input
 
-example1: {
-  key: 'id',
+base1: {
+  key: 'key1',
   operator: 'EQ',
-  value: '35001234' 
+  value: 'value1' 
 }
 
-example2: {
-  key: 'id',
+base2: {
+  key: 'key2',
   operator: 'EQ',
-  value: '35005678' 
+  value: 'value2' 
 }
 
 where: {
-  [
-    example1,
-    example2
+  or: [
+    base1,
+    base2
   ]
-  and: false
 }
 
 ### Output
 
-WHERE id = '35001234' OR id = '35005678'
+WHERE key1 = 'value1' OR key2 = 'value2'
 
 ### Input
 
-example1: {
-  key: 'id',
+base1: {
+  key: 'key1',
   operator: 'EQ',
-  value: '35001234' 
+  value: 'value1' 
 }
 
-example2: {
-  key: 'id',
+base2: {
+  key: 'key2',
   operator: 'EQ',
-  value: '35005678' 
+  value: 'value2' 
 }
 
-example3: {
-  key: 'age',
-  operator: 'GE',
-  value: '25' 
+base3: {
+  key: 'key3',
+  operator: 'GT',
+  value: 'value3' 
 }
 
 where: {
-  [
-    {
-      [
-        example1,
-        example2
-      ]
-      and: false
-    },
-    example3,
+  and: [
+    or: [
+      base1,
+      base2
+    ],
+    base3
   ]
-  and: true
 }
 
 ### Output
 
-WHERE (id = '35001234' OR id = '35005678') AND age >= '25'
+WHERE (key1 = 'value1' OR key2 = 'value2') AND key3 >= 'value3'
