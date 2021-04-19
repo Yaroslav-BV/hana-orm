@@ -72,14 +72,16 @@ example3: {
 }
 
 where: {
-  {
-    [
-      example1,
-      example2
-    ]
-    and: false
-  },
-  example3,
+  [
+    {
+      [
+        example1,
+        example2
+      ]
+      and: false
+    },
+    example3,
+  ]
   and: true
 }
 
