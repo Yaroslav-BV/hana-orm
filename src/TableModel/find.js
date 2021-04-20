@@ -3,16 +3,16 @@ const { getType } = require('../util')
 
 /**
  * @description Генерирует выборку SELECT и возвращет результат её выполнения в виде массива объектов
- * 
+ *
  * @param {object} p - Параметры для генерации SELECT
  * @param {boolean} p.distinct - Добавить DISTINCT
  * @param {number} p.top - Добавить TOP N ограничение
  * @param {array} p.columns - Список полей для выборки
  * @param {object} p.conditions - Добавить условие WHERE
  * @param {object} p.orderBy - Добавить сортировку ORDER BY
- * 
+ *
  * @returns {Promise} - Объект обещания вызова метода .exec()
- * 
+ *
  * @example
  * const result = User.find({
  *  distinct: true,
@@ -82,11 +82,11 @@ const find = function (p = {}) {
     : null
 
   // Generate statment
-  const selectStm = this.getSelectStm({
+  const selectStm = this._getSelectStm({
     distinct,
     top,
     columns,
-    table: this.table,
+    table: this._table,
     conditions: p.conditions,
     orderBy,
   })
