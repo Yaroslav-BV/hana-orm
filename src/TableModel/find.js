@@ -3,23 +3,20 @@ const { getType } = require('../util')
 
 /**
  * @description Генерирует выборку SELECT и возвращет результат её выполнения в виде массива объектов
- *
- * @param {object} p - Параметры для генерации SELECT
- * @param {boolean} p.distinct - Добавить DISTINCT
- * @param {number} p.top - Добавить TOP N ограничение
- * @param {array} p.columns - Список полей для выборки
- * @param {object} p.conditions - Добавить условие WHERE
- * @param {object} p.orderBy - Добавить сортировку ORDER BY
- *
- * @returns {Promise} - Объект обещания вызова метода .exec()
- *
+ * @param {Object} [p={}] Параметры для генерации SELECT
+ * @param {boolean} [p.distinct] DISTINCT
+ * @param {number} [p.top] TOP N ограничение
+ * @param {Array<string>} [p.columns] Список полей для выборки
+ * @param {string} [p.conditions] Условие WHERE
+ * @param {Object<string, string>} [p.orderBy] Cортировка ORDER BY
+ * @returns {Promise<Object[]>} Объект обещания вызова метода .exec()
  * @example
  * const result = User.find({
- *  distinct: true,
- *  top: 5,
- *  columns: ['id', 'first_name', 'last_name'],
- *  conditions: {},
- *  orderBy: {id: 'desc', age: 'asc'}
+ *    distinct: true,
+ *    top: 5,
+ *    columns: ['id', 'first_name', 'last_name'],
+ *    conditions: "WHERE id LIKE '3500%' AND age > 18",
+ *    orderBy: {id: 'desc', age: 'asc'}
  * })
  */
 
@@ -52,12 +49,7 @@ const find = function (p = {}) {
   const columns = _.isUndefined(p.columns) ? '*' : p.columns.join(', ')
 
   // Conditions
-  if (
-    !_.isUndefined(p.conditions) &&
-    (_.isArray(p.conditions) ||
-      _.isFunction(p.conditions) ||
-      !_.isObject(p.conditions))
-  )
+  if (!_.isUndefined(p.conditions) && !_.isString(p.conditions))
     throw Error(
       `Parametr "conditions" is not Object type. Current type: ${getType(
         p.conditions
