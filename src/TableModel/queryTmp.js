@@ -5,7 +5,7 @@
 const queryTmp = {
   selectTmp:
     'SELECT <%= distinct %> <%= top %> <%= columns %> FROM <%= table %> <%= conditions %> <%= orderBy %>',
-  insertTmp: 'INSERT INTO <%= table %> (<%= columns %>) VALUES (<%= values =>)',
+  insertTmp: 'INSERT INTO <%= table %> (<%= columns %>) VALUES(<%= valuesMask %>)',
   udpateTmp: 'UPDATE <%= table %> SET <%= set => <%= conditions %>',
   deleteTmp: 'DELETE FROM <%= table %> <%= conditions %>',
 }
