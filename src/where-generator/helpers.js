@@ -1,5 +1,9 @@
 const _ = require('underscore')
 
+function isNumber(value) {
+  return typeof value === 'number' && isFinite(value);
+}
+
 const Helpers = {
   isObject: (smth) => {
     if(!_.isObject(smth)) return false
@@ -15,7 +19,10 @@ const Helpers = {
   },
 
   joinKeyValue: (key, value, op) => {
-    return [key, value].join(` ${op} `)
+    return [
+      key, 
+      !isNumber(value) ? `'${value}'` : value 
+    ].join(` ${op} `)
   }
 }
 
