@@ -26,8 +26,8 @@ somethingObject = {
 ```sh
 somethingObject = {
     [Op.and]: [
-        a: 1,
-        b: 2
+        {a: 1},
+        {b: 2}
     ]
 }
 // WHERE a = 1 AND b = 2
@@ -35,8 +35,8 @@ somethingObject = {
 ```sh
 somethingObject = {
     [Op.or]: [
-        a: 1,
-        b: 2
+        {a: 1},
+        {b: 2}
     ]
 }
 // WHERE a = 1 OR b = 2
