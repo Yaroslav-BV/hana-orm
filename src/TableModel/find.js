@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('lodash')
 const { getType } = require('../util')
 
 /**
@@ -43,10 +43,7 @@ const find = function (p = {}) {
     throw Error(`Parametr "conditions" is not Object type. Current type: ${getType(p.conditions)}`)
 
   // Order by
-  if (
-    !_.isUndefined(p.orderBy) &&
-    (_.isArray(p.orderBy) || _.isFunction(p.orderBy) || !_.isObject(p.orderBy))
-  )
+  if (!_.isUndefined(p.orderBy) && !_.isPlainObject(p.orderBy))
     throw Error(`Parametr "orderBy" is not Object type. Current type: ${getType(p.orderBy)}`)
 
   const orderBy = !_.isEmpty(p.orderBy)

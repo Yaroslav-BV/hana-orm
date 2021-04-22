@@ -1,4 +1,4 @@
-const _ = require('underscore')
+const _ = require('lodash')
 const { getType } = require('../util')
 
 /**
@@ -17,7 +17,7 @@ const { getType } = require('../util')
 const create = function (data) {
   if (_.isUndefined(data) || _.isEmpty(data))
     throw Error('Parametr "data" is empty. For create record in table must be not empty object')
-  if (!_.isObject(data) || _.isArray(data) || _.isFunction(data))
+  if (!_.isPlainObject(data))
     throw Error(`Parametr "data" is not Object type. Current type: ${getType(data)}`)
 
   const columns = this._transformCols(_.keys(data))
