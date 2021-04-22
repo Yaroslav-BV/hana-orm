@@ -4,65 +4,61 @@ const Helpers = require('./helpers')
 
 const opSet = new Set(Object.values(Op))
 
-function getOps(obj) {
-  return Object.getOwnPropertySymbols(obj)
+function getOps(smthObj) {
+  return Object.getOwnPropertySymbols(smthObj)
     .filter(prop => opSet.has(prop))
 }
 
-function getComplexKeys(obj) {
-  return getOps(obj).concat(Object.keys(obj))
+function getMixedKeys(smthObj) {
+  return getOps(smthObj).concat(Object.keys(smthObj))
 }
 
-function whereItems(where) {
-  const whereComplexKeys = getComplexKeys(where)
+function getWhere(where, op) {
+  const whereKeys = getMixedKeys(where)
   const items = []
-  if(!whereComplexKeys.length) return
+  if(!whereKeys.length) return
 
-  whereComplexKeys.forEach(prop => {
+  whereKeys.forEach(prop => {
     const item = where[prop]
-    items.push(whereItem(prop, item))
+    items.push(getWhereItem(prop, item))
   })
 
-  return items.reverse().join(' AND ')
+  return items.reverse().join(op || ' AND ')
 }
 
-function whereItem(key, value) {
-
+function getWhereItem(key, value) {
   if(key === Op.and || key === Op.or) {
-    return whereGrouping(key, value)
+    if(Array.isArray(value)) {
+      return value
+        .map(item => getWhere(item, OpMap[key]))
+        .filter(item => item && item.length)
+        .join(OpMap[key])
+    } else {
+      throw new Error('Key [Op.and] || [Op.or] only support <object> as value')
+    }
   }
 
   return Helpers.joinKeyValue(key, value, OpMap[Op.eq])
 }
 
-function whereGrouping(key, value) {
-  const op = key === Op.and ? OpMap[Op.and] : OpMap[Op.or]
-
-  if(Array.isArray(value)) {
-    value = value.map(item => {
-      return whereItems(item)
-    })
-
-    value = value.join(op);
-  } else {
-    throw new Error('Operator and/or supported only <array> for value')
-  }
-
-  return value
+function getConditions(smthObj) {
+  if(!Helpers.isObject(smthObj)) throw new Error('Supported only <object>')
+  
+  return getWhere(obj) || '1=1'
 }
 
-function getConditions(where) {
-  if(!Helpers.isObject(where)) throw new Error('Supported only <object>')
-  
-  return whereItems(
+const obj = {
+  a: 1,
+  [Op.or]: [
+    {b: 2},
+    {c: 3},
     {
-      a: 1,
-      [Op.or]: [
-        {b: 2},
-        {c: 3}
+      [Op.and]: [
+        {d: 12},
+        {f: 2}
       ]
     }
-  ) || '1=1'
+  ]
 }
 
 module.exports = getConditions
