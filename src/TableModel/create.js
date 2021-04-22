@@ -20,7 +20,7 @@ const create = function (data) {
   if (!_.isObject(data) || _.isArray(data) || _.isFunction(data))
     throw Error(`Parametr "data" is not Object type. Current type: ${getType(data)}`)
 
-  const columns = _.keys(data).join(', ')
+  const columns = this._transformCols(_.keys(data))
   const values = _.values(data)
   const valuesMask = '?, '.repeat(values.length).slice(0, -2)
 

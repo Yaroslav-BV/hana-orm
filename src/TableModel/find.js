@@ -36,7 +36,7 @@ const find = function (p = {}) {
   // Columns
   if (!_.isUndefined(p.columns) && !_.isArray(p.columns))
     throw Error(`Parametr "columns" is not Array type. Current type: ${getType(p.columns)}`)
-  const columns = _.isUndefined(p.columns) ? '*' : p.columns.join(', ')
+  const columns = _.isUndefined(p.columns) ? '*' : this._transformCols(p.columns)
 
   // Conditions
   if (!_.isUndefined(p.conditions) && !_.isString(p.conditions))
