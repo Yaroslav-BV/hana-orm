@@ -14,7 +14,8 @@
       and: Symbol.for('and'),
       or: Symbol.for('or'),
       eq: Symbol.for('eq'),
-      ne: Symbol.for('ne')
+      ne: Symbol.for('ne'),
+      in: Symbol.for('in')
     }
   )
 

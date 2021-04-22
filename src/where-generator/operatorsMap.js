@@ -6,7 +6,8 @@ const OpMap =
      [Op.and]: ' AND ',
      [Op.or]: ' OR ',
      [Op.eq]: '=',
-     [Op.ne]: '!='
+     [Op.ne]: '!=',
+     [Op.in]: ' IN '
    }
  )
 
