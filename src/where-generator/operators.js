@@ -15,6 +15,10 @@
       or: Symbol.for('or'),
       eq: Symbol.for('eq'),
       ne: Symbol.for('ne'),
+      gt: Symbol.for('gt'),
+      gte: Symbol.for('gte'),
+      lt: Symbol.for('lt'),
+      lte: Symbol.for('lte'),
       in: Symbol.for('in')
     }
   )

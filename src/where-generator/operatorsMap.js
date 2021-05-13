@@ -7,6 +7,10 @@ const OpMap =
      [Op.or]: ' OR ',
      [Op.eq]: '=',
      [Op.ne]: '!=',
+     [Op.gt]: '>',
+     [Op.gte]: '>=',
+     [Op.lt]: '<',
+     [Op.lte]: '<=',
      [Op.in]: ' IN '
    }
  )

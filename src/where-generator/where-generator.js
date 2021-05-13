@@ -6,7 +6,7 @@ const opSet = new Set(Object.values(Op))
 /**
  * Получаем все символьные свойства в каком-то объекте
  * @param {<object>}} smthObj 
- * @returns {<array>} массив символьных свойств какого-то объекта
+ * @returns массив символьных свойств какого-то объекта
  */
 function getOps(smthObj) {
   return Object.getOwnPropertySymbols(smthObj)
@@ -15,7 +15,7 @@ function getOps(smthObj) {
 /**
  * Получаем все свойства из какого-то объекта включая символьные
  * @param {<object>} smthObj 
- * @returns {<array>} массив всех свойств какого-то объекта
+ * @returns массив всех свойств какого-то объекта
  */
 function getKeys(smthObj) {
   return getOps(smthObj).concat(Object.keys(smthObj))
@@ -25,7 +25,7 @@ function getKeys(smthObj) {
  * колличеством свойств
  * @param {<object>} where 
  * @param {<String>} op
- * @returns {<String>} строка условий
+ * @returns строка условий
  */
 function getWhere(where, op) {
   const whereKeys = getKeys(where)
@@ -43,7 +43,7 @@ function getWhere(where, op) {
  * Генерируем условие переданных параметров
  * @param {<String><Simbol>} key 
  * @param {*} value 
- * @returns {<String>} строка условия
+ * @returns строка условия
  */
 function getWhereItem(key, value) {
   if (key === undefined) throw new Error(`${key} is "undefined"`)
@@ -55,15 +55,18 @@ function getWhereItem(key, value) {
 
   if (key === Op.and || key === Op.or) {
     if (!valueIsArray) throw new Error('Key [Op.and] || [Op.or] only support <array> as value')
+    if (!value.length) throw new Error('Array value cannot be empty')
     /**
      * Т.к значение операторов and и or всегда массив,
      * значения этого массива обрабатываем в рекурсивном вызове
      * getWhere
      */
-    return value
-      .map(obj => getWhere(obj, OpMap[key]))
+    value = value
+      .map(item => getWhere(item, OpMap[key]))
       .filter(item => item && item.length)
-      .join(OpMap[key])
+      
+    return value.length > 1 ? 
+      `(${value.join(OpMap[key])})` : value.join(OpMap[key])
   }
 
   if (valueIsObject) {
@@ -88,7 +91,7 @@ function getWhereItem(key, value) {
 /**
  * Точка входа, принимает только объект
  * @param {<object>} smthObj 
- * @returns {<string>} конечная строка WHERE
+ * @returns конечная строка WHERE
  */
 function getConditions(smthObj) {
   if (!Helpers.isObject(smthObj)) throw new Error('Supported only <object>')
@@ -102,12 +105,11 @@ function getConditions(smthObj) {
 }
 
 const obj = {
+  a: 12,
   [Op.or]: [
-    {a: 1},
-    {c: 3}
-  ],
-  [Op.and]: [
-    {b: 4}
+    {b: 1},
+    {c: 2},
+    {e: 3}
   ]
 }
 
